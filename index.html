@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+<title>CSC 3007 - Assignment 1</title>
+<style>
+
+	table{
+		position: absolute;
+		left: 25%;
+		transform: translate (-25%, 0%);
+		width: 50%;
+		height: 10px;
+	}
+	
+	body{
+		
+		font-family: 'Montserrat';
+		background-color: #222222;
+		color: #f5f6fa;
+		text-align: center;
+	}
+
+	th{
+		padding: 20px;
+	}
+	
+	td{
+		font-family: 'Lato';
+		padding: 20px;
+	}
+	
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+	let myData = {}
+	let timeStamp = {}
+	fetch('https://api.data.gov.sg/v1/environment/psi')
+		.then(response => response.json())
+		.then(data => {
+			myData = data.items[0].readings
+            let timeRef = document.getElementById("time")
+            let timeStamp = data.items[0].timestamp
+            let timeAdd = `<h2>Timestamp: ${timeStamp}</h2>`
+            timeRef.innerHTML = timeAdd
+			console.log(myData);
+			getData();
+		}
+		
+	);
+	
+	function getData(){
+
+        for (const index in myData) {
+            console.log(`${index}: ${myData[index]}`);
+
+            var readings = index
+		    var west = myData[index].west;
+		    var national = myData[index].national;
+		    var east = myData[index].east;
+		    var central = myData[index].central;
+		    var south = myData[index].south;
+		    var north = myData[index].north;
+		    
+		    //Add Table
+		    // Link to table in HTML
+		    let tableRef = document.getElementById("addrows");
+
+		    let row = `
+                <tr>
+                    <td>${readings}</td>
+                    <td>${west}</td>
+                    <td>${national}</td>
+                    <td>${east}</td>
+                    <td>${central}</td>
+                    <td>${south}</td>
+                    <td>${north}</td>
+                </tr>`;
+
+		    tableRef.innerHTML += row;
+        }
+
+		
+				
+	}
+		
+</script>
+</head>
+<body>
+
+<h2>CSC 3007 - Assignment 1</h2>
+<h2>Code may take afew minutes to load, please be patient</h2>
+<div id="time"></div>
+<table id="table">
+    <tr>
+        <th>Readings</th>
+        <th>West</th>
+        <th>National</th>
+        <th>East</th>
+        <th>Central</th>
+        <th>South</th>
+        <th>North</th>
+        
+        <tbody id = "addrows">
+		</tbody>
+    </tr>
+</table>
+
+
+</body>
+</html>
